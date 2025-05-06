@@ -13,6 +13,11 @@ global score, high_score
 score = 0
 high_score = 0
 
+# Directions (Emily!!!!)
+global comp_direction, rival2_direction
+comp_direction = "right"
+rival2_direction = "up"
+
 # Set up the screen
 wn = turtle.Screen()
 wn.title("Snake Game COMP491 Beta 3")
@@ -37,7 +42,6 @@ def main_menu():
     menu_pen.hideturtle()
     menu_pen.goto(0, 200)
     menu_pen.write("TeamCAMZ-Rival Snake Beta", align="center", font=("Courier", 36, "bold"))
-    
     menu_pen.goto(0, 100)
     menu_pen.write("Press M to Play Against the Computer", align="center", font=("Courier", 24, "normal"))
     menu_pen.goto(0, 50)
@@ -63,6 +67,8 @@ def start_snake_game():
     """
 
     global head, food, segments, pen, score, high_score, comp_head, comp_segments, comp_direction
+   #EDITED HERE (EMILY!!!!)
+    global rival2_head, rival2_segments, rival2_direction
     wn.clear()
     
     # Snake head (Player Snake)
@@ -98,6 +104,18 @@ def start_snake_game():
     # Initialize the comp_direction to make sure the computer snake starts moving
     comp_direction = "right"  # Start moving right
 
+    
+    #Emily A Edited here!!!!!
+    rival2_head = turtle.Turtle()
+    rival2_head.speed(0)
+    rival2_head.shape("square")
+    rival2_head.color("purple")
+    rival2_head.penup()
+    rival2_head.goto(-200, -200)
+    rival2_head.direction = "up"
+
+    rival2_segments = []
+    
     # Pen
     pen = turtle.Turtle()
     pen.speed(0)
@@ -156,8 +174,31 @@ def start_snake_game():
             if comp_head.ycor() >= 390:  # Top edge of the 800x800 screen (400)
                 comp_direction = "right"
 
+#Emily A Edited here!
+def move_rival2():
+        global rival2_direction
+        if rival2_direction == "up":
+            rival2_head.sety(rival2_head.ycor() + 10)
+            if rival2_head.ycor() >= 390:
+                rival2_direction = "right"
+        elif rival2_direction == "right":
+            rival2_head.setx(rival2_head.xcor() + 10)
+            if rival2_head.xcor() >= 390:
+                rival2_direction = "down"
+        elif rival2_direction == "down":
+            rival2_head.sety(rival2_head.ycor() - 10)
+            if rival2_head.ycor() <= -390:
+                rival2_direction = "left"
+        elif rival2_direction == "left":
+            rival2_head.setx(rival2_head.xcor() - 10)
+            if rival2_head.xcor() <= -390:
+                rival2_direction = "up"
+
+    
     def game_loop():
 
+
+        
         """
         Updates the game state, including movement, collisions, and scoring.
         """
@@ -199,19 +240,20 @@ def start_snake_game():
                 high_score = score
             pen.clear()
             pen.write(f"Your Score: {score}  High Score: {high_score}", align="center", font=("Courier", 24, "normal"))
+       
         
         # Check for a collision with the computer snake
-        if head.distance(comp_head) < 20:
+        if head.distance(comp_head) < 20 or head.distance(rival2_head) < 20: #(EMILY !!)
             game_over()
 
         # Check for a collision between the player snake and computer snake segments
-        for segment in comp_segments:
+        for segment in comp_segments + rival2_segments: #(EMILY !!)
             if head.distance(segment) < 20:
                 game_over()
 
         move()
         move_computer()
-
+        move_rival2() #(EMILY)
         wn.ontimer(game_loop, int(delay * 1000))
 
     def game_over():
@@ -233,6 +275,12 @@ def start_snake_game():
         for segment in comp_segments:
             segment.goto(1000, 1000)
         comp_segments.clear()
+        rival2_head.goto(-200, -200) #Emily A Edited here!
+        rival2_head.direction = "up"
+        for segment in rival2_segments:
+            segment.goto(1000, 1000)
+        rival2_segments.clear()
+        
         global score, high_score, delay
         score = 0
         delay = 0.1
