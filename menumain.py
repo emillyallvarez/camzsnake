@@ -1,5 +1,3 @@
-
-
 import tkinter as tk
 import subprocess
 
@@ -10,10 +8,9 @@ def run_script(script_name):
     Args:
         script_name (str): The name of the Python script to be executed.
     """
-    subprocess.run(['python', script_name])
+    subprocess.run(['python3', script_name])
 
 def create_window():
-    
     """
     Creates and displays the main menu window for the Snake Game.
 
@@ -29,7 +26,7 @@ def create_window():
     button1 = tk.Button(window, text="Play Test2", command=lambda: run_script('test2.py'))
     button1.pack(pady=5)
 
-    button2 = tk.Button(window, text="Play Obstacle", command=lambda: run_script('Obstacles.py'))
+    button2 = tk.Button(window, text="Play Obstacle", command=lambda: run_script('Obstacle.py'))  # Fixed typo here
     button2.pack(pady=5)
 
     button3 = tk.Button(window, text="Play SecondRival", command=lambda: run_script('SecondRival.py'))
